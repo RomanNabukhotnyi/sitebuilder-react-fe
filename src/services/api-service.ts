@@ -4,7 +4,7 @@ import { redirect } from 'react-router-dom';
 import { refreshApi } from '../api/auth';
 
 const api = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 api.interceptors.request.use((request)=> {

@@ -5,22 +5,21 @@ import { SubmitHandler } from 'react-hook-form';
 import { Button } from '../../../common/Button/Button';
 import { FieldList } from '../../../common/FieldList/FieldList';
 
-import { signUp, selectLoading } from '../../../../store/auth/authSlice';
-
+import { login, selectLoading } from '../../../../store/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { EMAIL_PATTERN } from '../../../../constants/patterns';
 
-import { ApiSignUp } from '../../../../types/auth/ApiSignUp';
+import { EMAIL_PATTERN } from '../../../../constants/patterns';
+import { ApiLogin } from '../../../../types/auth/ApiLogin';
 import { Field } from '../../../../types/fields/Field';
 
-import './SignUpForm.scss';
+import './LoginForm.scss';
 
-export function SignUpForm() {
+export function LoginForm() {
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<ApiSignUp>();
+  } = useForm<ApiLogin>();
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectLoading);
 
@@ -37,16 +36,16 @@ export function SignUpForm() {
     },
   };
 
-  const onSubmit: SubmitHandler<ApiSignUp> = async (data) => {
-    dispatch(signUp(data));
+  const onSubmit: SubmitHandler<ApiLogin> = async (data) => {
+    dispatch(login(data));
     // toast.success('Sign up is successful!');
-    redirect('/login');
+    redirect('/projects');
   };
 
   return (
-    <form className="u-sign-up-form" onSubmit={handleSubmit(onSubmit)}>
+    <form className="u-login-form" onSubmit={handleSubmit(onSubmit)}>
       <FieldList fields={fields} errors={errors} register={register} />
-      <Button isLoading={loading} isDisabled={loading} label="Sign Up" className="button" type="submit" />
+      <Button isLoading={loading} isDisabled={loading} label="Login" className="button" type="submit" />
     </form>
   );
 }
