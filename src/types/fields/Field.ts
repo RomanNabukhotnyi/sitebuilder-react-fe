@@ -1,13 +1,9 @@
-import type { ValidatorError } from "../validators/ValidatorError";
-
 export interface Field {
-    key: string;
-    value: string;
-    isValid: boolean;
-    type?: string;
-    fieldClass?: string;
-    componentClass?: string;
-    placeholder?: string;
-    component: (props: {}) => JSX.Element;
-    errors: ValidatorError[];
-  }
+  type?: 'text' | 'password' | 'email' | 'number';
+  inputClassName?: string;
+  element?: 'input' | 'textarea';
+  fieldClassName?: string;
+  placeholder?: string;
+  required?: boolean;
+  pattern?: RegExp;
+}

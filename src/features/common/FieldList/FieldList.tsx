@@ -1,28 +1,33 @@
-import { Field } from '../Field/Field';
+import { UseFormRegister, FieldErrors } from 'react-hook-form';
+
+import { Input } from '../Input/Input';
 
 import { Field as IField } from '../../../types/fields/Field';
 
+import './FieldList.scss';
+
 interface IProps {
   fields: Record<string, IField>;
-  isShowErrors?: boolean;
+  register: UseFormRegister<any>;
+  errors: FieldErrors<any>;
 }
 
-export function FieldList({ fields, isShowErrors }: IProps) {
-  const fieldList = Object.values(fields).map((field) => (
-    <Field key={field.key} errors={field.errors} isShowErrors={isShowErrors} className={field.fieldClass ?? 'field'}>
-      {field.component({
-        className: field.componentClass,
-        type: field.type,
-        placeholder: field.placeholder,
-      })}
-      {/* <field.component
-        v-model="field.value"
-        v-focus="index === 0"
-        className="field.componentClass"
-        type="field.type"
-        placeholder="field.placeholder"
-      /> */}
-    </Field>
-  ));
+export function FieldList({ fields, errors, register }: IProps) {
+  const fieldList = Object.entries(fields).map(
+    ([name, { fieldClassName, inputClassName, placeholder, type, required, pattern }]) => (
+      <div className={`c-field ${fieldClassName ?? 'field'}`} key={name}>
+        <Input
+          name={name}
+          className={inputClassName}
+          placeholder={placeholder}
+          type={type}
+          register={register}
+          required={required}
+          pattern={pattern}
+        />
+        <p className="field__error">{errors[name]?.message as string}</p>
+      </div>
+    ),
+  );
   return <div className="c-field-list">{fieldList}</div>;
 }
