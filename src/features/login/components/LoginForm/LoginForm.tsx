@@ -1,11 +1,11 @@
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { SubmitHandler } from 'react-hook-form';
 
 import { Button } from '../../../common/Button/Button';
 import { FieldList } from '../../../common/FieldList/FieldList';
 
-import { login, selectLoading } from '../../../../store/auth/authSlice';
+import { login } from '../../../../store/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 
 import { EMAIL_PATTERN } from '../../../../constants/patterns';
@@ -21,7 +21,7 @@ export function LoginForm() {
     handleSubmit,
   } = useForm<ApiLogin>();
   const dispatch = useAppDispatch();
-  const loading = useAppSelector(selectLoading);
+  const navigate = useNavigate();
 
   const fields: Record<string, Field> = {
     email: {
@@ -36,16 +36,16 @@ export function LoginForm() {
     },
   };
 
-  const onSubmit: SubmitHandler<ApiLogin> = async (data) => {
+  const onSubmit: SubmitHandler<ApiLogin> = (data) => {
     dispatch(login(data));
     // toast.success('Sign up is successful!');
-    redirect('/projects');
+    navigate('/projects');
   };
 
   return (
     <form className="u-login-form" onSubmit={handleSubmit(onSubmit)}>
       <FieldList fields={fields} errors={errors} register={register} />
-      <Button isLoading={loading} isDisabled={loading} label="Login" className="button" type="submit" />
+      <Button label="Login" className="button" type="submit" />
     </form>
   );
 }

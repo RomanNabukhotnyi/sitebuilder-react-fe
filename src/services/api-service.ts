@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { refreshApi } from '../api/auth';
 
@@ -27,7 +27,8 @@ api.interceptors.response.use(
     ) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
-      redirect('/login');
+      const navigate = useNavigate();
+      navigate('/login');
       return Promise.reject(error);
     } else if (error.response && error.response.status === 401) {
       const { accessToken } = await refreshApi();

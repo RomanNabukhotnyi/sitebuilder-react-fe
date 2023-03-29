@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, Outlet, redirect } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 
 import { UserMenu } from './components/UserMenu/UserMenu';
 
@@ -7,6 +7,7 @@ import './Main.scss';
 
 export function Main() {
   const [menuVisible, setMenuVisible] = useState(false);
+  const navigate = useNavigate();
 
   const user = {
     id: 1,
@@ -15,7 +16,7 @@ export function Main() {
 
   const handleLogout = async () => {
     // await authStore.logout();
-    redirect('/login');
+    navigate('/login');
   };
   
   return (

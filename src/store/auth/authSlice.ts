@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { signUpApi, loginApi, refreshApi } from '../../api/auth';
+import { getUserApi } from '../../api/user';
 
 import { ApiSignUp } from '../../types/auth/ApiSignUp';
 import { ApiLogin } from '../../types/auth/ApiLogin';
@@ -9,28 +10,35 @@ import { RootState } from '..';
 
 export interface AuthState {
   user: ApiUser | null;
-  loading: boolean;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: any;
+  error: string | null;
 }
 
 const initialState: AuthState = {
   user: null,
-  loading: false,
   status: 'idle',
   error: null,
 };
 
 export const signUp = createAsyncThunk('auth/signUp', async (payload: ApiSignUp) => {
-    await signUpApi(payload);
+  await signUpApi(payload);
 });
 
-export const login = createAsyncThunk('auth/login', async (payload: ApiLogin) => {
-    await loginApi(payload);
+export const login = createAsyncThunk('auth/login', async (payload: ApiLogin, thunkApi) => {
+  const data = await loginApi(payload);
+  const { accessToken, refreshToken } = data;
+  localStorage.setItem('accessToken', accessToken);
+  localStorage.setItem('refreshToken', refreshToken);
+  thunkApi.dispatch(getUser());
 });
 
 export const refresh = createAsyncThunk('auth/refresh', async () => {
-    await refreshApi();
+  await refreshApi();
+});
+
+export const getUser = createAsyncThunk('auth/getUser', async () => {
+  const data = await getUserApi();
+  return data;
 });
 
 export const authSlice = createSlice({
@@ -47,10 +55,11 @@ export const authSlice = createSlice({
       })
       .addCase(signUp.rejected, (state) => {
         state.status = 'failed';
-      }); 
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+      });
   },
 });
-
-export const selectLoading = (state: RootState)=>state.auth.loading;
 
 export default authSlice.reducer;

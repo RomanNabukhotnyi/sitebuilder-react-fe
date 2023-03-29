@@ -1,0 +1,125 @@
+.u-project-list {
+  .projectsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 272px);
+    grid-gap: 24px;
+    justify-content: center;
+    padding: 12px 0;
+  }
+
+  .project {
+    position: relative;
+    width: 272px;
+    border-radius: 2px;
+    border: 1px solid #edeced;
+    cursor: pointer;
+
+    &:hover {
+      .projectHover {
+        border: 2px solid #419bf9;
+        top: -2px;
+        left: -2px;
+        position: absolute;
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        background-color: rgba(65, 154, 249, 0.2);
+        border-radius: 4px;
+      }
+      .btnProjectMenu {
+        opacity: 1;
+        transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    }
+
+    &:not(:hover) {
+      .btnProjectMenu {
+        opacity: 0;
+        transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    }
+  }
+
+  .btnProjectMenu {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    cursor: pointer;
+    background-color: #edeced;
+    border-radius: 50%;
+    min-width: 28px;
+    min-height: 28px;
+    line-height: 0;
+  }
+
+  .imageContainer {
+    width: 100%;
+    height: 92px;
+    background-color: #fbfbfb;
+    background-image: url('https://img.zeplin.io/https%3A%2F%2Fcdn.zeplin.io%2F638878ea1a052582d3461e31%2Fscreens%2F1ef6e135-a095-40bb-a7a6-ef091643fe44.png?w=270&amp;cropTop=0&amp;cropLeft=0&amp;cropWidth=270&amp;cropHeight=92');
+
+    .projectImage {
+      width: 100%;
+      height: 92px;
+      opacity: 1;
+    }
+  }
+
+  .project__body {
+    padding: 18px 12px 12px;
+    background-color: #fff;
+
+    .projectName {
+      line-height: 21px;
+      font-size: 18px;
+      color: #554d56;
+    }
+  }
+
+  .deleteProject {
+    opacity: 0.5;
+    cursor: default;
+
+    .btnProjectMenu {
+      display: none;
+    }
+  }
+
+  .noProjects {
+    padding: 60px 84px 108px;
+    text-align: center;
+
+    h3 {
+      line-height: 28px;
+      font-weight: 300;
+      font-size: 24px;
+      color: #554d56;
+      margin-bottom: 12px;
+    }
+  }
+
+  /* placeholders */
+  .project-placeholder {
+    background-color: #eeeeee;
+    width: 272px;
+    height: 191px;
+    border-radius: 2px;
+  }
+
+  .placeholder-animate {
+    animation-name: loading;
+    animation-timing-function: steps(10, end);
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-duration: 1s;
+  }
+}
+
+@keyframes loading {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
