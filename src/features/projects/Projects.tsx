@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { useAppDispatch } from '../../app/hooks';
-import { useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 import { getProjects } from '../../store/projects/projectsSlice';
 import { selectAllProjects } from '../../store/projects/projectsSlice';
@@ -23,8 +22,8 @@ export function Projects() {
   useEffect(()=>{
     dispatch(getProjects());
   }, [dispatch]);
-  const projects = useSelector(selectAllProjects);
-  const loadingGetProjects = useSelector(selectLoadingGetProjects);
+  const projects = useAppSelector(selectAllProjects);
+  const loadingGetProjects = useAppSelector(selectLoadingGetProjects);
 
   return (
     <div className="p-projects">

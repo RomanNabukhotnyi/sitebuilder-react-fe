@@ -1,3 +1,5 @@
+import { useNavigate, useParams } from 'react-router-dom';
+
 import { Button } from '../../../common/Button/Button';
 
 import { ApiPage } from '../../../../types/pages/ApiPage';
@@ -11,12 +13,19 @@ interface IProps {
 }
 
 export function PageList({ pages, loadingGetPages }: IProps) {
+  const navigate = useNavigate();
+  const { projectId } = useParams();
+
+  const openPage = (pageId: number) => {
+    navigate(`/projects/${projectId}/pages/${pageId}`);
+  };
+
   const pageList = pages.map((page) => {
     return (
       <div className="page">
         <div
           className="pageImage"
-          //   @click="openPage(element.id)"
+            onClick={() => openPage(page.id)}
         />
         <div className="page__body">
           <div className="page__name">

@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getPages } from '../../store/pages/pagesSlice';
 import { selectAllPages, selectLoadingGetPages } from '../../store/pages/pagesSlice';
 
@@ -21,8 +20,8 @@ export function Pages() {
     dispatch(getPages(+projectId!));
   }, [dispatch, projectId]);
 
-  const pages = useSelector(selectAllPages);
-  const loadingGetPages = useSelector(selectLoadingGetPages);
+  const pages = useAppSelector(selectAllPages);
+  const loadingGetPages = useAppSelector(selectLoadingGetPages);
 
   return (
     <div className="p-pages">

@@ -1,0 +1,77 @@
+.u-slot-list {
+  .slots {
+    display: grid;
+  }
+
+  .slot {
+    position: relative;
+    // align-items: center;
+    // display: flex;
+    // justify-content: center;
+    height: auto;
+
+    &:hover {
+      &:not(.deleteSlot) {
+        outline: 1px solid #419bf9;
+
+        .slot-list__menu {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .slot-list__menu {
+    display: none;
+  }
+
+  .deleteSlot {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .emptySlot {
+    margin: 5px;
+    border: 1px dotted;
+    color: #554d56;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .staticSlot {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #6a6a6a;
+    color: white;
+    padding: 5px;
+  }
+
+  /* placeholders */
+  .slot-placeholder {
+    background-color: #eeeeee;
+    height: 100px;
+  }
+
+  .placeholder-animate {
+    animation-name: loading;
+    animation-timing-function: steps(10, end);
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-duration: 1s;
+  }
+}
+
+@keyframes loading {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
