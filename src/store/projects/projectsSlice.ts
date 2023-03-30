@@ -3,8 +3,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getProjectsApi } from '../../api/projects';
 import { getPermisiionsByProjectId } from '../../api/permissions';
 import { getApiKeyByProjectId } from '../../api/api-key';
+import { createProjectApi } from '../../api/projects';
+import { deleteProjectApi } from '../../api/projects';
 
 import type { PreparedProject } from '../../types/projects/PreparedProject';
+import { ApiCreateProject } from '../../types/projects/ApiCreateProject';
 import { ApiPermission } from '../../types/permissions/ApiPermission';
 import { ApiKey } from '../../types/ApiKey';
 import { RootState } from '..';
@@ -12,9 +15,9 @@ import { RootState } from '..';
 export interface ProjectsState {
   projects: PreparedProject[];
   loadingGetProjects: boolean;
-  // loadingCreateProject: boolean;
+  loadingCreateProject: boolean;
   // loadingEditProject: boolean;
-  // loadingDeleteProject: boolean;
+  loadingDeleteProject: boolean;
   // loadingAddPermission: boolean;
   // loadingDeletePermission: boolean;
   // loadingCreateApiKey: boolean;
@@ -27,9 +30,9 @@ export interface ProjectsState {
 const initialState: ProjectsState = {
   projects: [],
   loadingGetProjects: false,
-  // loadingCreateProject: false,
+  loadingCreateProject: false,
   // loadingEditProject: false,
-  // loadingDeleteProject: false,
+  loadingDeleteProject: false,
   // loadingAddPermission: false,
   // loadingDeletePermission: false,
   // loadingCreateApiKey: false,
@@ -77,23 +80,54 @@ export const getProjects = createAsyncThunk('projects/getProjects', async () => 
   return projects;
 });
 
+export const createProject = createAsyncThunk('projects/createProject', async (payload: ApiCreateProject) => {
+  const project = await createProjectApi(payload);
+  const permissions = await getPermisiionsByProjectId(project.id);
+  return {
+    ...project,
+    permissions,
+  };
+});
+
+export const deleteProject = createAsyncThunk('projects/deleteProject', async (projectId: number) => {
+  const data = await deleteProjectApi(projectId);
+  return data;
+});
+
 export const projectsSlice = createSlice({
   name: 'projects',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-    .addCase(getProjects.pending, (state) => {
-      state.loadingGetProjects = true;
-    })
-    .addCase(getProjects.fulfilled, (state, action) => {
-      state.projects = action.payload;
-      state.loadingGetProjects = false;
-    });
+      .addCase(getProjects.pending, (state) => {
+        state.loadingGetProjects = true;
+      })
+      .addCase(getProjects.fulfilled, (state, action) => {
+        state.projects = action.payload;
+        state.loadingGetProjects = false;
+      })
+      .addCase(createProject.pending, (state) => {
+        state.loadingCreateProject = true;
+      })
+      .addCase(createProject.fulfilled, (state, action) => {
+        state.projects.push(action.payload);
+        state.loadingCreateProject = false;
+      })
+      .addCase(deleteProject.pending, (state) => {
+        state.loadingDeleteProject = true;
+      })
+      .addCase(deleteProject.fulfilled, (state, action) => {
+        const index = state.projects.findIndex((project) => project.id === action.payload.id);
+        state.projects.splice(index, 1);
+        state.loadingDeleteProject = false;
+      });
   },
 });
 
 export const selectAllProjects = (state: RootState) => state.projects.projects;
 export const selectLoadingGetProjects = (state: RootState) => state.projects.loadingGetProjects;
+export const selectLoadingCreateProject = (state: RootState) => state.projects.loadingCreateProject;
+export const selectLoadingDeleteProject = (state: RootState) => state.projects.loadingDeleteProject;
 
 export default projectsSlice.reducer;
