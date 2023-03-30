@@ -4,8 +4,9 @@ import { SignUp } from '../features/sign-up/SignUp';
 import { Login } from '../features/login/Login';
 import { Main } from '../features/main/Main';
 import { Projects } from '../features/projects/Projects';
+import { Pages } from '../features/pages/Pages';
 
-import { RouteObject, redirect } from 'react-router-dom';
+import { RouteObject } from 'react-router-dom';
 
 export const routes: RouteObject[] = [
     {
@@ -23,6 +24,10 @@ export const routes: RouteObject[] = [
             {
                 path: 'projects',
                 element: <Projects />
+            },
+            {
+                path: 'projects/:projectId',
+                element: <Pages />
             }
         ]
     }

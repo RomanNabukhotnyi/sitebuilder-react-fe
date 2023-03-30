@@ -61,7 +61,7 @@ async function getProjectApiKey(projectId: string | number) {
   return apiKey;
 }
 
-export const getProjects = createAsyncThunk('auth/signUp', async () => {
+export const getProjects = createAsyncThunk('projects/getProjects', async () => {
   const data = await getProjectsApi();
   const projects = await Promise.all(
     data.map(async (project) => {

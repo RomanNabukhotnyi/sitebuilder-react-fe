@@ -1,4 +1,5 @@
 import { ApiProject } from '../../../../types/projects/ApiProject';
+import { useNavigate } from 'react-router-dom';
 
 import './ProjectList.scss';
 
@@ -9,7 +10,11 @@ interface IProps {
 }
 
 export function ProjectList({ projects, loadingGetProjects }: IProps) {
-  const openProject = (projectId: number) => {};
+  const navigate = useNavigate();
+
+  const openProject = (projectId: number) => {
+    navigate(`/projects/${projectId}`);
+  };
 
   const projectList = projects.map((project) => {
     return (
@@ -24,7 +29,7 @@ export function ProjectList({ projects, loadingGetProjects }: IProps) {
             @edit="showEditDialog(project)"
             @delete="deleteProject(project.id)"
           /> */}
-        <div onClick={() => openProject(project.id)} />
+        <div className='projectHover' onClick={() => openProject(project.id)} />
         <div className="imageContainer">
           <button type="button" className="btnProjectMenu">
             {/* @click.stop="showMenu(project.id)" */}
@@ -40,7 +45,7 @@ export function ProjectList({ projects, loadingGetProjects }: IProps) {
 
   return (
     <div className="u-project-list">
-      {!loadingGetProjects && projects.length && <div className="projectsContainer">
+      {!loadingGetProjects && !!projects.length && <div className="projectsContainer">
         {/* <CTransitionList> */}
         {projectList}
         {/* </CTransitionList> */}

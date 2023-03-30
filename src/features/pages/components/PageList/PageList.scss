@@ -1,0 +1,98 @@
+.u-page-list {
+  .deletePage {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .pagesContainer {
+    grid-gap: 24px;
+    padding: 12px 36px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 240px);
+    justify-content: center;
+  }
+
+  .page {
+    // cursor: move;
+    cursor: pointer;
+    position: relative;
+    background-color: white;
+    outline: 1px solid rgba(188, 181, 185, 0.3);
+    border-radius: 2px;
+  }
+
+  .page__body {
+    padding: 6px 6px;
+  }
+
+  .pageImage {
+    outline: 1px solid rgba(188, 181, 185, 0.3);
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    height: 520px;
+    width: 100%;
+    background-image: url('https://img.zeplin.io/https%3A%2F%2Fcdn.zeplin.io%2F638878ea1a052582d3461e31%2Fscreens%2Fd3c4ec2b-e88d-4f68-a1ff-ac47e9b32cc7.png?w=240&amp;cropTop=0&amp;cropLeft=0&amp;cropWidth=240&amp;cropHeight=520');
+  }
+
+  .page__name {
+    width: 100%;
+    margin: 0 0 5px 0;
+
+    input {
+      width: 100%;
+      border: solid rgba(255, 255, 255, 0.01);
+      border-width: 0 0 2px;
+    }
+  }
+
+  .noPages {
+    padding: 60px 84px 108px;
+    text-align: center;
+
+    h3 {
+      line-height: 28px;
+      font-weight: 300;
+      font-size: 24px;
+      color: #554d56;
+      margin-bottom: 12px;
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: end;
+  }
+
+  .button__edit {
+    background-color: #ffc038;
+  }
+
+  .button__delete {
+    background-color: #ff4747;
+  }
+
+  /* placeholders */
+  .page-placeholder {
+    background-color: #eeeeee;
+    width: 240px;
+    height: 590px;
+    border-radius: 2px;
+  }
+
+  .placeholder-animate {
+    animation-name: loading;
+    animation-timing-function: steps(10, end);
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-duration: 1s;
+  }
+}
+
+@keyframes loading {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
