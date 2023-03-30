@@ -6,7 +6,7 @@ import { Button } from '../../../common/Button/Button';
 import { FieldList } from '../../../common/FieldList/FieldList';
 
 import { login } from '../../../../store/auth/authSlice';
-import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch } from '../../../../app/hooks';
 
 import { EMAIL_PATTERN } from '../../../../constants/patterns';
 import { ApiLogin } from '../../../../types/auth/ApiLogin';

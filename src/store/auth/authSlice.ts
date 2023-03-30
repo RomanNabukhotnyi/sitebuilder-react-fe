@@ -6,7 +6,6 @@ import { getUserApi } from '../../api/user';
 import { ApiSignUp } from '../../types/auth/ApiSignUp';
 import { ApiLogin } from '../../types/auth/ApiLogin';
 import { ApiUser } from '../../types/users/ApiUser';
-import { RootState } from '..';
 
 export interface AuthState {
   user: ApiUser | null;

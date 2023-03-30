@@ -4,10 +4,11 @@ import './ProjectList.scss';
 
 interface IProps {
   className?: string;
+  loadingGetProjects: boolean;
   projects: ApiProject[];
 }
 
-export function ProjectList({ projects }: IProps) {
+export function ProjectList({ projects, loadingGetProjects }: IProps) {
   const openProject = (projectId: number) => {};
 
   const projectList = projects.map((project) => {
@@ -39,22 +40,22 @@ export function ProjectList({ projects }: IProps) {
 
   return (
     <div className="u-project-list">
-      <div v-show="!loadingGetProjects && projects.length" className="projectsContainer">
+      {!loadingGetProjects && projects.length && <div className="projectsContainer">
         {/* <CTransitionList> */}
         {projectList}
         {/* </CTransitionList> */}
-      </div>
-      <div v-show="!loadingGetProjects && projects.length === 0" className="noProjects">
+      </div>}
+      {!loadingGetProjects && projects.length === 0 && <div className="noProjects">
         <h3>No projects</h3>
-      </div>
-      <div v-show="loadingGetProjects" className="projectsContainer">
+      </div>}
+      {loadingGetProjects && <div className="projectsContainer">
         {/* <div
         v-for="item in 3"
         :key="item"
         class="project-placeholder placeholder-animate"
         :style="{ animationDelay: `1.${item}s` }"
       /> */}
-      </div>
+      </div>}
     </div>
   );
 }

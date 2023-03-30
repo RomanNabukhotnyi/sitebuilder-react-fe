@@ -4,10 +4,10 @@ import type { ApiUpdateProject } from '../../types/projects/ApiUpdateProject';
 
 import { api } from "../../services/api-service";
 
-export const createProject = (payload: ApiCreateProject): Promise<ApiProject> => api.post('/projects', payload);
+export const createProjectApi = (payload: ApiCreateProject): Promise<ApiProject> => api.post('/projects', payload);
 
-export const getProjects = (): Promise<ApiProject[]> => api.get('/projects');
+export const getProjectsApi = (): Promise<ApiProject[]> => api.get('/projects');
 
-export const updateProject = (projectId: number | string, payload: ApiUpdateProject): Promise<ApiProject> => api.put(`/projects/${projectId}`, payload);
+export const updateProjectApi = (projectId: number | string, payload: ApiUpdateProject): Promise<ApiProject> => api.put(`/projects/${projectId}`, payload);
 
-export const deleteProject = (projectId: number | string): Promise<{ id: number }> => api.delete(`/projects/${projectId}`);
+export const deleteProjectApi = (projectId: number | string): Promise<{ id: number }> => api.delete(`/projects/${projectId}`);

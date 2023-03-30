@@ -1,4 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import { useAppDispatch } from '../../app/hooks';
+import { useSelector } from 'react-redux';
+
+import { getProjects } from '../../store/projects/projectsSlice';
+import { selectAllProjects } from '../../store/projects/projectsSlice';
+import { selectLoadingGetProjects } from '../../store/projects/projectsSlice';
 
 import { Button } from '../common/Button/Button';
 import { Modal } from '../common/Modal/Modal';
@@ -11,8 +18,13 @@ import './Projects.scss';
 export function Projects() {
   const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const dispatch = useAppDispatch();
 
-  const projects: any[] = [];
+  useEffect(()=>{
+    dispatch(getProjects());
+  }, [dispatch]);
+  const projects = useSelector(selectAllProjects);
+  const loadingGetProjects = useSelector(selectLoadingGetProjects);
 
   return (
     <div className="p-projects">
@@ -53,7 +65,7 @@ export function Projects() {
         <Button label="Create Project" className="button__create" onClick={() => setIsCreateFormOpen(true)} />
       </div>
       <div>
-        <ProjectList projects={projects} />
+        <ProjectList projects={projects} loadingGetProjects={loadingGetProjects} />
       </div>
     </div>
   );
