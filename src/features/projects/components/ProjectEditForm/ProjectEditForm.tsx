@@ -1,25 +1,36 @@
-import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { SubmitHandler } from 'react-hook-form';
 
 import { Button } from '../../../common/Button/Button';
 import { FieldList } from '../../../common/FieldList/FieldList';
 
-import { useAppDispatch } from '../../../../app/hooks';
+import { useAppSelector } from '../../../../app/hooks';
+import { selectProjectById } from '../../../../store/projects/projectsSlice';
 
-import { ApiSignUp } from '../../../../types/auth/ApiSignUp';
+import { ApiUpdateProject } from '../../../../types/projects/ApiUpdateProject';
 import { Field } from '../../../../types/fields/Field';
 
 import './ProjectEditForm.scss';
 
-export function ProjectEditForm() {
+interface IProps {
+  isLoading: boolean;
+  projectId: number;
+  onSubmit: SubmitHandler<ApiUpdateProject>;
+}
+
+export function ProjectEditForm({ isLoading, onSubmit, projectId }: IProps) {
+  const project = useAppSelector((state) => selectProjectById(state, projectId))!;
+
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<ApiSignUp>();
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  } = useForm<ApiUpdateProject>({
+    defaultValues: {
+      projectId: project.id,
+      name: project.name,
+    },
+  });
 
   const fields: Record<string, Field> = {
     name: {
@@ -28,16 +39,11 @@ export function ProjectEditForm() {
     },
   };
 
-  const onSubmit: SubmitHandler<ApiSignUp> = async (data) => {
-    // dispatch(signUp(data));
-  };
-
-
   return (
     <form className="u-project-edit-form" onSubmit={handleSubmit(onSubmit)}>
       <h4>Edit project</h4>
       <FieldList fields={fields} errors={errors} register={register} />
-      <Button label="Edit" className="button" type="submit" />
+      <Button isLoading={isLoading} label="Edit" className="button" type="submit" />
     </form>
   );
 }

@@ -13,12 +13,18 @@ interface IProps {
   className?: string;
   loadingGetProjects: boolean;
   projects: ApiProject[];
-  setIsEditFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  openEditForm: (projectId: number) => void;
   setIsApiKeyOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsPermissionsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function ProjectList({ projects, loadingGetProjects, setIsEditFormOpen, setIsApiKeyOpen, setIsPermissionsOpen }: IProps) {
+export function ProjectList({
+  projects,
+  loadingGetProjects,
+  openEditForm,
+  setIsApiKeyOpen,
+  setIsPermissionsOpen,
+}: IProps) {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [menuProjectId, setMenuProjectId] = useState(0);
   const dispatch = useAppDispatch();
@@ -30,7 +36,6 @@ export function ProjectList({ projects, loadingGetProjects, setIsEditFormOpen, s
 
   const handleDeleteProject = (projectId: number) => {
     dispatch(deleteProject(projectId));
-
   };
 
   const openMenu = (projectId: number) => {
@@ -48,9 +53,15 @@ export function ProjectList({ projects, loadingGetProjects, setIsEditFormOpen, s
             // openPermissions: () => void;
             // openApiKey: () => void;
             setIsApiKeyOpen={setIsApiKeyOpen}
-            setIsEditFormOpen={setIsEditFormOpen}
+            openEditForm={()=>{
+              setIsOpenMenu(false);
+              openEditForm(project.id);
+            }}
             setIsPermissionsOpen={setIsPermissionsOpen}
-            deleteProject={() => handleDeleteProject(project.id)}
+            deleteProject={() => {
+              setIsOpenMenu(false);
+              handleDeleteProject(project.id);
+            }}
             // :user="user"
             // :project="project"
             // @show-permissions="showPermissions(project)"

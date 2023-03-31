@@ -8,8 +8,10 @@ import {
   selectAllProjects,
   selectLoadingGetProjects,
   selectLoadingCreateProject,
+  selectLoadingEditProject,
 } from '../../store/projects/projectsSlice';
 import { createProject } from '../../store/projects/projectsSlice';
+import { editProject } from '../../store/projects/projectsSlice';
 
 import { Button } from '../common/Button/Button';
 import { Modal } from '../common/Modal/Modal';
@@ -18,6 +20,7 @@ import { ProjectEditForm } from './components/ProjectEditForm/ProjectEditForm';
 import { ProjectList } from './components/ProjectList/ProjectList';
 
 import { ApiCreateProject } from '../../types/projects/ApiCreateProject';
+import { ApiUpdateProject } from '../../types/projects/ApiUpdateProject';
 
 import './Projects.scss';
 
@@ -26,18 +29,31 @@ export function Projects() {
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   const [isApiKeyOpen, setIsApiKeyOpen] = useState(false);
   const [isPermissionsOpen, setIsPermissionsOpen] = useState(false);
+  const [editProjectId, setEditProjectId] = useState(0);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getProjects());
   }, [dispatch]);
+
   const projects = useAppSelector(selectAllProjects);
   const loadingGetProjects = useAppSelector(selectLoadingGetProjects);
   const loadingCreateProject = useAppSelector(selectLoadingCreateProject);
+  const loadingEditProject = useAppSelector(selectLoadingEditProject);
+
+  const openEditForm = (projectId: number) => {
+    setEditProjectId(projectId);
+    setIsEditFormOpen(true);
+  };
 
   const onSubmitCreateForm: SubmitHandler<ApiCreateProject> = async (data) => {
     dispatch(createProject(data));
     setIsCreateFormOpen(false);
+  };
+
+  const onSubmitEditForm: SubmitHandler<ApiUpdateProject> = async (data) => {
+    dispatch(editProject(data));
+    setIsEditFormOpen(false);
   };
 
   return (
@@ -47,9 +63,11 @@ export function Projects() {
           <ProjectCreateForm onSubmit={onSubmitCreateForm} isLoading={loadingCreateProject} />
         </Modal>
       )}
-      {/* {isEditFormOpen && <Modal setIsOpen={setIsEditFormOpen}>
-        <ProjectEditForm onSubmit={() => setIsCreateFormOpen(false)} />
-      </Modal>} */}
+      {isEditFormOpen && (
+        <Modal setIsOpen={setIsEditFormOpen}>
+          <ProjectEditForm onSubmit={onSubmitEditForm} isLoading={loadingEditProject} projectId={editProjectId} />
+        </Modal>
+      )}
       {/* <CModal v-model:show="permissionsVisible">
       <UProjectUserPermissions
         :project="permissionsProject!"
@@ -82,7 +100,7 @@ export function Projects() {
         <ProjectList
           projects={projects}
           loadingGetProjects={loadingGetProjects}
-          setIsEditFormOpen={setIsEditFormOpen}
+          openEditForm={openEditForm}
           setIsApiKeyOpen={setIsApiKeyOpen}
           setIsPermissionsOpen={setIsPermissionsOpen}
         />

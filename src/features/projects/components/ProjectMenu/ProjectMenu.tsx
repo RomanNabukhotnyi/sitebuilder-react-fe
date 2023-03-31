@@ -2,13 +2,13 @@ import './ProjectMenu.scss';
 
 interface IProps {
   setIsOpenMenu: (value: boolean) => void;
-  setIsEditFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  openEditForm: () => void;
   setIsApiKeyOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsPermissionsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   deleteProject: () => void;
 }
 
-export function ProjectMenu({ setIsEditFormOpen, deleteProject, setIsOpenMenu, setIsApiKeyOpen, setIsPermissionsOpen }: IProps) {
+export function ProjectMenu({ openEditForm, deleteProject, setIsOpenMenu, setIsApiKeyOpen, setIsPermissionsOpen }: IProps) {
   return (
     <div className="u-project-menu">
       <div v-if="show" className="overlay" onClick={() => setIsOpenMenu(false)} />
@@ -23,7 +23,7 @@ export function ProjectMenu({ setIsEditFormOpen, deleteProject, setIsOpenMenu, s
         <div v-if="isOwner" className="action" onClick={() => setIsApiKeyOpen(true)}>
           Api key
         </div>
-        <div v-if="isOwner" className="action" onClick={() => setIsEditFormOpen(true)}>
+        <div v-if="isOwner" className="action" onClick={() => openEditForm()}>
           Edit
         </div>
         <div v-if="isOwner" className="action" onClick={() => deleteProject()}>
