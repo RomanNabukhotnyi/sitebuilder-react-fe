@@ -127,20 +127,26 @@ export const createProjectApikey = createAsyncThunk('project/createProjectApiKey
   };
 });
 
-export const refreshProjectApikey = createAsyncThunk('project/refreshProjectApiKey', async ({projectId, apiKeyId}: {projectId: number, apiKeyId: number}) => {
-  const data = await refreshApiKey(projectId, apiKeyId);
-  return {
-    projectId,
-    data,
-  };
-});
+export const refreshProjectApikey = createAsyncThunk(
+  'project/refreshProjectApiKey',
+  async ({ projectId, apiKeyId }: { projectId: number; apiKeyId: number }) => {
+    const data = await refreshApiKey(projectId, apiKeyId);
+    return {
+      projectId,
+      data,
+    };
+  },
+);
 
-export const deleteProjectApikey = createAsyncThunk('project/deleteProjectApiKey', async ({projectId, apiKeyId}: {projectId: number, apiKeyId: number}) => {
-  await deleteApiKey(projectId, apiKeyId);
-  return {
-    projectId,
-  };
-});
+export const deleteProjectApikey = createAsyncThunk(
+  'project/deleteProjectApiKey',
+  async ({ projectId, apiKeyId }: { projectId: number; apiKeyId: number }) => {
+    await deleteApiKey(projectId, apiKeyId);
+    return {
+      projectId,
+    };
+  },
+);
 
 export const projectsSlice = createSlice({
   name: 'projects',
@@ -162,21 +168,21 @@ export const projectsSlice = createSlice({
         state.projects.push(action.payload);
         state.loadingCreateProject = false;
       })
-      .addCase(deleteProject.pending, (state) => {
-        state.loadingDeleteProject = true;
+      .addCase(editProject.fulfilled, (state, action) => {
+        const index = state.projects.findIndex((project) => project.id === action.payload.id);
+        Object.assign(state.projects[index], action.payload);
+        state.loadingEditProject = false;
       })
       .addCase(editProject.pending, (state) => {
         state.loadingEditProject = true;
+      })
+      .addCase(deleteProject.pending, (state) => {
+        state.loadingDeleteProject = true;
       })
       .addCase(deleteProject.fulfilled, (state, action) => {
         const index = state.projects.findIndex((project) => project.id === action.payload.id);
         state.projects.splice(index, 1);
         state.loadingDeleteProject = false;
-      })
-      .addCase(editProject.fulfilled, (state, action) => {
-        const index = state.projects.findIndex((project) => project.id === action.payload.id);
-        Object.assign(state.projects[index], action.payload);
-        state.loadingEditProject = false;
       })
       .addCase(createPermission.pending, (state) => {
         state.loadingCreatePermission = true;

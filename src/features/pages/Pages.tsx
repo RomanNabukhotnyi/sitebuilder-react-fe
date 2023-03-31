@@ -1,18 +1,34 @@
 import { useState, useEffect } from 'react';
+import { SubmitHandler } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getPages } from '../../store/pages/pagesSlice';
-import { selectAllPages, selectLoadingGetPages } from '../../store/pages/pagesSlice';
+import {
+  selectAllPages,
+  getPages,
+  createPage,
+  editPage,
+  selectLoadingGetPages,
+  selectLoadingCreatePage,
+  selectLoadingEditPage,
+  // selectLoadingDeletePage,
+} from '../../store/pages/pagesSlice';
 
 import { Modal } from '../common/Modal/Modal';
 import { Button } from '../common/Button/Button';
 import { PageList } from './components/PageList/PageList';
+import { PageCreateForm } from './components/PageCreateForm/PageCreateForm';
+import { PageEditForm } from './components/PageEditForm/PageEditForm';
+
+import { ApiCreatePage } from '../../types/pages/ApiCreatePage';
+import { ApiUpdatePage } from '../../types/pages/ApiUpdatePage';
 
 import './Pages.scss';
 
 export function Pages() {
   const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [editPageId, setEditPageId] = useState(0);
   const { projectId } = useParams();
   const dispatch = useAppDispatch();
 
@@ -22,35 +38,45 @@ export function Pages() {
 
   const pages = useAppSelector(selectAllPages);
   const loadingGetPages = useAppSelector(selectLoadingGetPages);
+  const loadingCreatePage = useAppSelector(selectLoadingCreatePage);
+  const loadingEditPage = useAppSelector(selectLoadingEditPage);
+
+  const openEditForm = (pageId: number) => {
+    setEditPageId(pageId);
+    setIsEditFormOpen(true);
+  };
+
+  const onSubmitCreateForm: SubmitHandler<ApiCreatePage> = async (data) => {
+    await dispatch(createPage(data));
+    setIsCreateFormOpen(false);
+  };
+
+  const onSubmitEditForm: SubmitHandler<ApiUpdatePage> = async (data) => {
+    await dispatch(editPage(data));
+    setIsEditFormOpen(false);
+  };
 
   return (
     <div className="p-pages">
       {isCreateFormOpen && (
         <Modal setIsOpen={setIsCreateFormOpen}>
-          {/* <UPageCreateForm
-        :loading-create-page="loadingCreatePage"
-        :pages="pages"
-        @create="handleCreatePage"
-      /> */}
+          <PageCreateForm isLoading={loadingCreatePage} onSubmit={onSubmitCreateForm} />
         </Modal>
       )}
-      {/* <CModal v-model:show="dialogEditVisible">
-      <UPageEditForm
-        :page="editingPage!"
-        :loading-edit-page="loadingEditPage"
-        :pages="pages"
-        @edit="handleEditPage"
-      />
-    </CModal> */}
+      {isEditFormOpen && (
+        <Modal setIsOpen={setIsEditFormOpen}>
+          <PageEditForm pageId={editPageId} isLoading={loadingEditPage} onSubmit={onSubmitEditForm} />
+        </Modal>
+      )}
       <div className="panel">
         {/* <div class="panel__sort">
         <!-- SORT -->
       </div>
       <CSearch v-model="searchQuery" /> */}
-        <Button label="Create Page" className="button__create" onClick={() => {}} />
+        <Button label="Create Page" className="button__create" onClick={() => setIsCreateFormOpen(true)} />
       </div>
       <div>
-        <PageList loadingGetPages={loadingGetPages} pages={pages} />
+        <PageList openEditForm={openEditForm} loadingGetPages={loadingGetPages} pages={pages} />
       </div>
     </div>
   );

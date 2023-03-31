@@ -2,6 +2,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '../../../common/Button/Button';
 
+import { useAppDispatch } from '../../../../app/hooks';
+
+import { deletePage } from '../../../../store/pages/pagesSlice';
+
 import { ApiPage } from '../../../../types/pages/ApiPage';
 
 import './PageList.scss';
@@ -10,23 +14,31 @@ interface IProps {
   className?: string;
   loadingGetPages: boolean;
   pages: ApiPage[];
+  openEditForm: (pageId: number) => void;
 }
 
-export function PageList({ pages, loadingGetPages }: IProps) {
+export function PageList({ pages, loadingGetPages, openEditForm }: IProps) {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { projectId } = useParams();
 
   const openPage = (pageId: number) => {
     navigate(`/projects/${projectId}/pages/${pageId}`);
   };
 
+  const handleDeletePage = async (pageId: number) => {
+    await dispatch(
+      deletePage({
+        projectId: +projectId!,
+        pageId,
+      }),
+    );
+  };
+
   const pageList = pages.map((page) => {
     return (
-      <div className="page">
-        <div
-          className="pageImage"
-            onClick={() => openPage(page.id)}
-        />
+      <div className="page" key={page.id}>
+        <div className="pageImage" onClick={() => openPage(page.id)} />
         <div className="page__body">
           <div className="page__name">
             <p>{page.name}</p>
@@ -35,13 +47,9 @@ export function PageList({ pages, loadingGetPages }: IProps) {
             <Button
               label="Edit"
               className="button__edit"
-              //   @click.stop="showEditDialog(element)"
+              onClick={()=>openEditForm(page.id)}
             />
-            <Button
-              label="Delete"
-              className="button__delete"
-              //   @click.stop="deletePage(element.id)"
-            />
+            <Button label="Delete" className="button__delete" onClick={() => handleDeletePage(page.id)} />
           </div>
         </div>
       </div>

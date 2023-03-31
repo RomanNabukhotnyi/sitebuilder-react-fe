@@ -1,0 +1,18 @@
+.u-page-edit-form {
+  display: flex;
+  flex-direction: column;
+
+  .field {
+    margin: 15px 0;
+  }
+
+  .error {
+    font-size: 10px;
+    color: rgb(255, 107, 107);
+  }
+
+  .button {
+    align-self: flex-end;
+    width: 50%;
+  }
+}
