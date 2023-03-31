@@ -33,7 +33,7 @@ export function ProjectCreateForm({onSubmit, isLoading}: IProps) {
     <form className="u-project-create-form" onSubmit={handleSubmit(onSubmit)}>
       <h4>Create project</h4>
       <FieldList fields={fields} errors={errors} register={register} />
-      <Button label="Create" className="button" type="submit" isLoading={isLoading} />
+      <Button label="Create" className="button" type="submit" isLoading={isLoading} isDisabled={isLoading} />
     </form>
   );
 }

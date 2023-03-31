@@ -1,0 +1,95 @@
+.c-select {
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  position: relative;
+
+  .selected {
+    padding: 10px;
+    display: flex;
+    border-radius: 5px 5px 0 0;
+    background-color: #419bf9;
+    justify-content: space-between;
+
+    svg {
+      align-self: center;
+      margin: 0 0 0 10px;
+    }
+
+    &:first-child:last-child {
+      border-radius: 5px;
+    }
+
+    &:hover {
+      opacity: 0.95;
+    }
+  }
+
+  .options {
+    background-color: #fff;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+  }
+
+  .option {
+    padding: 10px;
+    background-color: #58a9ff;
+
+    &:last-child {
+      border-radius: 0 0 5px 5px;
+    }
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  .slide-enter-active,
+  .slide-leave-active {
+    transform-origin: top;
+    transition: transform 0.1s linear;
+  }
+
+  .slide-enter-from,
+  .slide-leave-to {
+    transform: scaleY(0);
+  }
+
+  .chevron {
+    display: inline-block;
+    width: 14px;
+    height: 11px;
+
+    &__group {
+      transform: translateY(0);
+      transition: transform 0.1s linear;
+    }
+
+    &__box--left,
+    &__box--right {
+      transform: rotate(0) translateY(0);
+      transition: transform 0.1s linear;
+    }
+
+    &__box--left {
+      transform-origin: 1px 1px;
+    }
+
+    &__box--right {
+      transform-origin: 7px 1px;
+    }
+
+    &--flip &__box--left {
+      transform: rotate(-90deg) translateY(0);
+    }
+
+    &--flip &__box--right {
+      transform: rotate(90deg) translateY(0);
+    }
+
+    &--flip &__group {
+      transform: translateY(3px);
+    }
+  }
+}

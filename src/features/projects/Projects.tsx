@@ -18,6 +18,8 @@ import { Modal } from '../common/Modal/Modal';
 import { ProjectCreateForm } from './components/ProjectCreateForm/ProjectCreateForm';
 import { ProjectEditForm } from './components/ProjectEditForm/ProjectEditForm';
 import { ProjectList } from './components/ProjectList/ProjectList';
+import { ProjectPermissions } from './components/ProjectPermissions/ProjectPermissions';
+import { ProjectApiKey } from './components/ProjectApiKey/ProjectApiKey';
 
 import { ApiCreateProject } from '../../types/projects/ApiCreateProject';
 import { ApiUpdateProject } from '../../types/projects/ApiUpdateProject';
@@ -29,7 +31,7 @@ export function Projects() {
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   const [isApiKeyOpen, setIsApiKeyOpen] = useState(false);
   const [isPermissionsOpen, setIsPermissionsOpen] = useState(false);
-  const [editProjectId, setEditProjectId] = useState(0);
+  const [menuProjectId, setMenuProjectId] = useState(0);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -41,18 +43,21 @@ export function Projects() {
   const loadingCreateProject = useAppSelector(selectLoadingCreateProject);
   const loadingEditProject = useAppSelector(selectLoadingEditProject);
 
-  const openEditForm = (projectId: number) => {
-    setEditProjectId(projectId);
+  const openEditForm = () => {
     setIsEditFormOpen(true);
   };
 
+  const openMenu = (projectId: number) => {
+    setMenuProjectId(projectId);
+  };
+
   const onSubmitCreateForm: SubmitHandler<ApiCreateProject> = async (data) => {
-    dispatch(createProject(data));
+    await dispatch(createProject(data));
     setIsCreateFormOpen(false);
   };
 
   const onSubmitEditForm: SubmitHandler<ApiUpdateProject> = async (data) => {
-    dispatch(editProject(data));
+    await dispatch(editProject(data));
     setIsEditFormOpen(false);
   };
 
@@ -65,32 +70,38 @@ export function Projects() {
       )}
       {isEditFormOpen && (
         <Modal setIsOpen={setIsEditFormOpen}>
-          <ProjectEditForm onSubmit={onSubmitEditForm} isLoading={loadingEditProject} projectId={editProjectId} />
+          <ProjectEditForm onSubmit={onSubmitEditForm} isLoading={loadingEditProject} projectId={menuProjectId} />
         </Modal>
       )}
-      {/* <CModal v-model:show="permissionsVisible">
-      <UProjectUserPermissions
-        :project="permissionsProject!"
-        :projects="projects"
-        :user="user"
-        :loading-add-permission="loadingAddPermission"
-        :loading-delete-permission="loadingDeletePermission"
-        @invite="handleAddPermission"
-        @delete="handleDeletePermission"
-      />
-    </CModal>
-    <CModal v-model:show="apiKeyVisible">
-      <UProjectApiKey
-        :project="apiKeyProject!"
-        :user="user"
-        :loading-create-api-key="loadingCreateApiKey"
-        :loading-refresh-api-key="loadingRefreshApiKey"
-        :loading-delete-api-key="loadingDeleteApiKey"
-        @create="handleCreateApiKey"
-        @refresh="handleRefreshApiKey"
-        @delete="handleDeleteApiKey"
-      />
-    </CModal> */}
+      {isPermissionsOpen && (
+        <Modal setIsOpen={setIsPermissionsOpen}>
+          <ProjectPermissions
+            projectId={menuProjectId}
+            // :project="permissionsProject!"
+            // :projects="projects"
+            // :user="user"
+            // :loading-add-permission="loadingAddPermission"
+            // :loading-delete-permission="loadingDeletePermission"
+            // @invite="handleAddPermission"
+            // @delete="handleDeletePermission"
+          />
+        </Modal>
+      )}
+      {isApiKeyOpen && (
+        <Modal setIsOpen={setIsApiKeyOpen}>
+          <ProjectApiKey
+            projectId={menuProjectId}
+            // :project="apiKeyProject!"
+            // :user="user"
+            // :loading-create-api-key="loadingCreateApiKey"
+            // :loading-refresh-api-key="loadingRefreshApiKey"
+            // :loading-delete-api-key="loadingDeleteApiKey"
+            // @create="handleCreateApiKey"
+            // @refresh="handleRefreshApiKey"
+            // @delete="handleDeleteApiKey"
+          />
+        </Modal>
+      )}
       <div className="panel">
         <div className="panel__sort">{/* <!-- SORT --> */}</div>
         {/* <CSearch v-model="searchQuery" /> */}
@@ -100,6 +111,7 @@ export function Projects() {
         <ProjectList
           projects={projects}
           loadingGetProjects={loadingGetProjects}
+          openMenu={openMenu}
           openEditForm={openEditForm}
           setIsApiKeyOpen={setIsApiKeyOpen}
           setIsPermissionsOpen={setIsPermissionsOpen}

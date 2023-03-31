@@ -43,7 +43,7 @@ export function ProjectEditForm({ isLoading, onSubmit, projectId }: IProps) {
     <form className="u-project-edit-form" onSubmit={handleSubmit(onSubmit)}>
       <h4>Edit project</h4>
       <FieldList fields={fields} errors={errors} register={register} />
-      <Button isLoading={isLoading} label="Edit" className="button" type="submit" />
+      <Button isLoading={isLoading} isDisabled={isLoading} label="Edit" className="button" type="submit" />
     </form>
   );
 }

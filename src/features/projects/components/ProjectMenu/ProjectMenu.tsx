@@ -17,16 +17,28 @@ export function ProjectMenu({ openEditForm, deleteProject, setIsOpenMenu, setIsA
       name="menu"
     > */}
       <div className="menu">
-        <div className="action" onClick={() => setIsPermissionsOpen(true)}>
+        <div className="action" onClick={() => {
+          setIsOpenMenu(false);
+          setIsPermissionsOpen(true);
+        }}>
           Permissions
         </div>
-        <div v-if="isOwner" className="action" onClick={() => setIsApiKeyOpen(true)}>
+        <div v-if="isOwner" className="action" onClick={() => {
+          setIsOpenMenu(false);
+          setIsApiKeyOpen(true);
+        }}>
           Api key
         </div>
-        <div v-if="isOwner" className="action" onClick={() => openEditForm()}>
+        <div v-if="isOwner" className="action" onClick={() => {
+          setIsOpenMenu(false);
+          openEditForm();
+        }}>
           Edit
         </div>
-        <div v-if="isOwner" className="action" onClick={() => deleteProject()}>
+        <div v-if="isOwner" className="action" onClick={() => {
+          setIsOpenMenu(false);
+          deleteProject();
+        }}>
           Delete
         </div>
       </div>

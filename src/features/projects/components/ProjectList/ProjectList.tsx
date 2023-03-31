@@ -13,7 +13,8 @@ interface IProps {
   className?: string;
   loadingGetProjects: boolean;
   projects: ApiProject[];
-  openEditForm: (projectId: number) => void;
+  openMenu: (projectId: number) => void;
+  openEditForm: () => void;
   setIsApiKeyOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsPermissionsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -21,6 +22,7 @@ interface IProps {
 export function ProjectList({
   projects,
   loadingGetProjects,
+  openMenu,
   openEditForm,
   setIsApiKeyOpen,
   setIsPermissionsOpen,
@@ -34,12 +36,13 @@ export function ProjectList({
     navigate(`/projects/${projectId}`);
   };
 
-  const handleDeleteProject = (projectId: number) => {
-    dispatch(deleteProject(projectId));
+  const handleDeleteProject = () => {
+    dispatch(deleteProject(menuProjectId));
   };
 
-  const openMenu = (projectId: number) => {
+  const handleOpenMenu = (projectId: number) => {
     setMenuProjectId(projectId);
+    openMenu(projectId);
     setIsOpenMenu(true);
   };
 
@@ -53,15 +56,9 @@ export function ProjectList({
             // openPermissions: () => void;
             // openApiKey: () => void;
             setIsApiKeyOpen={setIsApiKeyOpen}
-            openEditForm={()=>{
-              setIsOpenMenu(false);
-              openEditForm(project.id);
-            }}
+            openEditForm={openEditForm}
             setIsPermissionsOpen={setIsPermissionsOpen}
-            deleteProject={() => {
-              setIsOpenMenu(false);
-              handleDeleteProject(project.id);
-            }}
+            deleteProject={handleDeleteProject}
             // :user="user"
             // :project="project"
             // @show-permissions="showPermissions(project)"
@@ -72,8 +69,14 @@ export function ProjectList({
         )}
         <div className="projectHover" onClick={() => openProject(project.id)} />
         <div className="imageContainer">
-          <button type="button" className="btnProjectMenu" onClick={() => openMenu(project.id)}>
-            {/* <CIconMenu /> */}
+          <button type="button" className="btnProjectMenu" onClick={() => handleOpenMenu(project.id)}>
+            <svg width="24" height="24" viewBox="0 0 24 24">
+              <path
+                fill="#554d56"
+                fillRule="evenodd"
+                d="M11.437 7.5a2 2 0 0 1-3.874 0H4.5a.5.5 0 0 1 0-1H7.563a2 2 0 0 1 3.874 0H19.5a.5.5 0 1 1 0 1h-8.063zm-1.07 0a.995.995 0 0 0 0-1 1 1 0 1 0 0 1zm3.196 4.5a2 2 0 0 1 3.874 0H19.5a.5.5 0 1 1 0 1h-2.063a2 2 0 0 1-3.874 0H4.5a.5.5 0 1 1 0-1h9.063zm1.07 0a.995.995 0 0 0 0 1 1 1 0 1 0 0-1zm-5.196 6a2 2 0 0 1-3.874 0H4.5a.5.5 0 1 1 0-1h1.063a2 2 0 0 1 3.874 0H19.5a.5.5 0 1 1 0 1H9.437zm-1.07 0a.995.995 0 0 0 0-1 1 1 0 1 0 0 1z"
+              />
+            </svg>
           </button>
         </div>
         <div className="project__body">

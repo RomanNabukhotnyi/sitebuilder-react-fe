@@ -1,0 +1,77 @@
+.u-project-api-key {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+
+  .apiKeys {
+    margin: 10px 0;
+  }
+
+  .apiKey {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    justify-content: space-between;
+  }
+
+  .loadingApiKey {
+    opacity: 0.5;
+  }
+
+  .roleAndActions {
+    display: flex;
+    align-items: center;
+  }
+
+  .actions {
+    display: flex;
+  }
+
+  .button__delete {
+    margin: 0 0 0 5px;
+    background-color: #ff4747;
+
+    &:disabled {
+      background-color: #a9b5c2;
+    }
+  }
+
+  .button__refresh {
+    background-color: #ffc038;
+
+    &:disabled {
+      background-color: #a9b5c2;
+    }
+  }
+
+  .field {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 0;
+  }
+
+  .button {
+    width: 20%;
+  }
+
+  /* animations */
+  .list-enter-active,
+  .list-leave-active {
+    transition: all 0.5s ease;
+  }
+  .list-enter-from,
+  .list-leave-to {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  .createButton-enter-active,
+  .createButton-leave-active {
+    transition: all 0.5s ease;
+  }
+  .createButton-enter-from,
+  .createButton-leave-to {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}

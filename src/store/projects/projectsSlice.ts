@@ -1,16 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { getProjectsApi } from '../../api/projects';
-import { getPermisiionsByProjectId } from '../../api/permissions';
 import { getApiKeyByProjectId } from '../../api/api-key';
-import { createProjectApi } from '../../api/projects';
-import { updateProjectApi } from '../../api/projects';
-import { deleteProjectApi } from '../../api/projects';
+import { createProjectApi, deleteProjectApi, updateProjectApi, getProjectsApi } from '../../api/projects';
+import { createPermissionApi, deletePermissionApi, getPermisiionsByProjectIdApi } from '../../api/permissions';
+import { createApiKey, refreshApiKey, deleteApiKey } from '../../api/api-key';
 
 import type { PreparedProject } from '../../types/projects/PreparedProject';
 import { ApiCreateProject } from '../../types/projects/ApiCreateProject';
 import { ApiUpdateProject } from '../../types/projects/ApiUpdateProject';
 import { ApiPermission } from '../../types/permissions/ApiPermission';
+import { ApiCreatePermission } from '../../types/permissions/ApiCreatePermission';
 import { ApiKey } from '../../types/ApiKey';
 import { RootState } from '..';
 
@@ -20,11 +19,11 @@ export interface ProjectsState {
   loadingCreateProject: boolean;
   loadingEditProject: boolean;
   loadingDeleteProject: boolean;
-  // loadingAddPermission: boolean;
-  // loadingDeletePermission: boolean;
-  // loadingCreateApiKey: boolean;
-  // loadingRefreshApiKey: boolean;
-  // loadingDeleteApiKey: boolean;
+  loadingCreatePermission: boolean;
+  loadingDeletePermission: boolean;
+  loadingCreateApiKey: boolean;
+  loadingRefreshApiKey: boolean;
+  loadingDeleteApiKey: boolean;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: any;
 }
@@ -35,11 +34,11 @@ const initialState: ProjectsState = {
   loadingCreateProject: false,
   loadingEditProject: false,
   loadingDeleteProject: false,
-  // loadingAddPermission: false,
-  // loadingDeletePermission: false,
-  // loadingCreateApiKey: false,
-  // loadingRefreshApiKey: false,
-  // loadingDeleteApiKey: false,
+  loadingCreatePermission: false,
+  loadingDeletePermission: false,
+  loadingCreateApiKey: false,
+  loadingRefreshApiKey: false,
+  loadingDeleteApiKey: false,
   status: 'idle',
   error: null,
 };
@@ -47,7 +46,7 @@ const initialState: ProjectsState = {
 async function getProjectPermissions(projectId: string | number) {
   let permissions: ApiPermission[] = [];
   try {
-    permissions = await getPermisiionsByProjectId(projectId);
+    permissions = await getPermisiionsByProjectIdApi(projectId);
   } catch (error) {
     permissions = [];
   }
@@ -84,7 +83,7 @@ export const getProjects = createAsyncThunk('projects/getProjects', async () => 
 
 export const createProject = createAsyncThunk('projects/createProject', async (payload: ApiCreateProject) => {
   const project = await createProjectApi(payload);
-  const permissions = await getPermisiionsByProjectId(project.id);
+  const permissions = await getPermisiionsByProjectIdApi(project.id);
   return {
     ...project,
     permissions,
@@ -99,6 +98,48 @@ export const editProject = createAsyncThunk('projects/editProject', async (paylo
 export const deleteProject = createAsyncThunk('projects/deleteProject', async (projectId: number) => {
   const data = await deleteProjectApi(projectId);
   return data;
+});
+
+export const createPermission = createAsyncThunk('project/createPermission', async (payload: ApiCreatePermission) => {
+  const data = await createPermissionApi(payload.projectId, payload);
+  return {
+    projectId: payload.projectId,
+    data,
+  };
+});
+
+export const deletePermission = createAsyncThunk(
+  'project/deletePermission',
+  async ({ projectId, userId }: { projectId: number; userId: number }) => {
+    const data = await deletePermissionApi(projectId, userId);
+    return {
+      projectId,
+      data,
+    };
+  },
+);
+
+export const createProjectApikey = createAsyncThunk('project/createProjectApiKey', async (projectId: number) => {
+  const data = await createApiKey(projectId);
+  return {
+    projectId,
+    data,
+  };
+});
+
+export const refreshProjectApikey = createAsyncThunk('project/refreshProjectApiKey', async ({projectId, apiKeyId}: {projectId: number, apiKeyId: number}) => {
+  const data = await refreshApiKey(projectId, apiKeyId);
+  return {
+    projectId,
+    data,
+  };
+});
+
+export const deleteProjectApikey = createAsyncThunk('project/deleteProjectApiKey', async ({projectId, apiKeyId}: {projectId: number, apiKeyId: number}) => {
+  await deleteApiKey(projectId, apiKeyId);
+  return {
+    projectId,
+  };
 });
 
 export const projectsSlice = createSlice({
@@ -136,6 +177,49 @@ export const projectsSlice = createSlice({
         const index = state.projects.findIndex((project) => project.id === action.payload.id);
         Object.assign(state.projects[index], action.payload);
         state.loadingEditProject = false;
+      })
+      .addCase(createPermission.pending, (state) => {
+        state.loadingCreatePermission = true;
+      })
+      .addCase(createPermission.fulfilled, (state, action) => {
+        const index = state.projects.findIndex((project) => project.id === action.payload.projectId);
+        state.projects[index].permissions.push(action.payload.data);
+        state.loadingCreatePermission = false;
+      })
+      .addCase(deletePermission.pending, (state) => {
+        state.loadingDeletePermission = true;
+      })
+      .addCase(deletePermission.fulfilled, (state, action) => {
+        const projectIndex = state.projects.findIndex((project) => project.id === action.payload.projectId);
+        const permissionIndex = state.projects[projectIndex].permissions.findIndex(
+          (permission) => permission.userId === action.payload.data.id,
+        );
+        state.projects[projectIndex].permissions.splice(permissionIndex, 1);
+        state.loadingDeletePermission = false;
+      })
+      .addCase(createProjectApikey.pending, (state) => {
+        state.loadingCreateApiKey = true;
+      })
+      .addCase(createProjectApikey.fulfilled, (state, action) => {
+        const projectIndex = state.projects.findIndex((project) => project.id === action.payload.projectId);
+        state.projects[projectIndex].apiKey = action.payload.data;
+        state.loadingCreateApiKey = false;
+      })
+      .addCase(refreshProjectApikey.pending, (state) => {
+        state.loadingRefreshApiKey = true;
+      })
+      .addCase(refreshProjectApikey.fulfilled, (state, action) => {
+        const projectIndex = state.projects.findIndex((project) => project.id === action.payload.projectId);
+        state.projects[projectIndex].apiKey = action.payload.data;
+        state.loadingRefreshApiKey = false;
+      })
+      .addCase(deleteProjectApikey.pending, (state) => {
+        state.loadingDeleteApiKey = true;
+      })
+      .addCase(deleteProjectApikey.fulfilled, (state, action) => {
+        const projectIndex = state.projects.findIndex((project) => project.id === action.payload.projectId);
+        state.projects[projectIndex].apiKey = undefined;
+        state.loadingDeleteApiKey = false;
       });
   },
 });
@@ -147,5 +231,9 @@ export const selectLoadingGetProjects = (state: RootState) => state.projects.loa
 export const selectLoadingCreateProject = (state: RootState) => state.projects.loadingCreateProject;
 export const selectLoadingDeleteProject = (state: RootState) => state.projects.loadingDeleteProject;
 export const selectLoadingEditProject = (state: RootState) => state.projects.loadingEditProject;
+export const selectLoadingCreatePermission = (state: RootState) => state.projects.loadingCreatePermission;
+export const selectLoadingCreateApiKey = (state: RootState) => state.projects.loadingCreateApiKey;
+export const selectLoadingRefreshApiKey = (state: RootState) => state.projects.loadingRefreshApiKey;
+export const selectLoadingDeleteApiKey = (state: RootState) => state.projects.loadingDeleteApiKey;
 
 export default projectsSlice.reducer;
