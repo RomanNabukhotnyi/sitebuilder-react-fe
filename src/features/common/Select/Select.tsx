@@ -16,7 +16,10 @@ export function Select({ selected, options, setSelected, className }: IProps) {
 
   const optionList = options.map((option) => {
     return (
-      <div key={option.name} className="option" onClick={() => setSelected(option.value)}>
+      <div key={option.name} className="option" onClick={() => {
+        setSelected(option.value);
+        setIsOptionsVisible(false);
+      }}>
         {option.name}
       </div>
     );

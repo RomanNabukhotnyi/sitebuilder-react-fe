@@ -5,7 +5,7 @@ import type { Order } from '../../types/Order';
 
 import { api } from '../../services/api-service';
 
-export const createBlock = (
+export const createBlockApi = (
   projectId: number | string,
   payload: ApiCreateBlock
 ): Promise<ApiBlock> => api.post(`/projects/${projectId}/blocks`, payload);
@@ -20,14 +20,14 @@ export const getBlocksBySlotId = (
     },
   });
 
-export const updateBlock = (
+export const updateBlockApi = (
   projectId: number | string,
   blockId: number | string,
   payload: ApiUpdateBlock
 ): Promise<ApiBlock> =>
   api.put(`/projects/${projectId}/blocks/${blockId}`, payload);
 
-export const updateBlockOrder = (
+export const updateBlockOrderApi = (
   projectId: number | string,
   slotId: number | string,
   orders: Order[]
@@ -37,7 +37,7 @@ export const updateBlockOrder = (
     orders,
   });
 
-export const deleteBlock = (
+export const deleteBlockApi = (
   projectId: number | string,
   blockId: number | string
 ): Promise<{ id: number }> => api.delete(`/projects/${projectId}/blocks/${blockId}`);

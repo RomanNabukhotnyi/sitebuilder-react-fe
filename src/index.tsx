@@ -7,6 +7,7 @@ import { routes } from './routes';
 import reportWebVitals from './reportWebVitals';
 
 import './index.css';
+import 'material-icons/iconfont/material-icons.css';
 
 const router = createBrowserRouter(routes);
 

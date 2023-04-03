@@ -1,0 +1,13 @@
+.u-slot-create-form {
+  display: flex;
+  flex-direction: column;
+
+  .select {
+    margin: 15px 0;
+  }
+
+  .button {
+    align-self: flex-end;
+    width: 50%;
+  }
+}

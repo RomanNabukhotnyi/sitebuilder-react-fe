@@ -1,0 +1,23 @@
+.u-block-create-form {
+  display: flex;
+  flex-direction: column;
+
+  .select {
+    margin: 10px 0 0;
+  }
+
+  .field {
+    margin: 5px 0;
+  }
+
+  .error {
+    font-size: 10px;
+    color: rgb(255, 107, 107);
+  }
+
+  .button {
+    margin: 15px 0 0;
+    align-self: flex-end;
+    width: 50%;
+  }
+}

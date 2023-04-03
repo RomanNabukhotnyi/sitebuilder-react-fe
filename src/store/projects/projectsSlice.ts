@@ -168,13 +168,13 @@ export const projectsSlice = createSlice({
         state.projects.push(action.payload);
         state.loadingCreateProject = false;
       })
+      .addCase(editProject.pending, (state) => {
+        state.loadingEditProject = true;
+      })
       .addCase(editProject.fulfilled, (state, action) => {
         const index = state.projects.findIndex((project) => project.id === action.payload.id);
         Object.assign(state.projects[index], action.payload);
         state.loadingEditProject = false;
-      })
-      .addCase(editProject.pending, (state) => {
-        state.loadingEditProject = true;
       })
       .addCase(deleteProject.pending, (state) => {
         state.loadingDeleteProject = true;

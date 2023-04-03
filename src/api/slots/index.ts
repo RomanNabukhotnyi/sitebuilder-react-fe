@@ -4,7 +4,7 @@ import type { Order } from '../../types/Order';
 
 import { api } from '../../services/api-service';
 
-export const createSlot = (
+export const createSlotApi = (
   projectId: number | string,
   payload: ApiCreateSlot
 ): Promise<ApiSlot> => api.post(`/projects/${projectId}/slots`, payload);
@@ -19,7 +19,7 @@ export const getSlotsByPageId = (
     },
   });
 
-export const updateSlotOrder = (
+export const updateSlotOrderApi = (
   projectId: number | string,
   pageId: number | string,
   orders: Order[]
@@ -29,7 +29,7 @@ export const updateSlotOrder = (
     orders,
   });
 
-export const deleteSlot = (
+export const deleteSlotAPi = (
   projectId: number | string,
   slotId: number | string
 ): Promise<{ id: number }> =>
