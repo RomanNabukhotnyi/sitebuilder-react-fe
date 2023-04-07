@@ -4,7 +4,14 @@ import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector, useUtils } from '../../app/hooks';
 
-import { selectAllSlots, selectLoadingGetSlots, getSlots, createSlot, createBlock, editBlock } from '../../store/slots/slotsSlice';
+import {
+  selectAllSlots,
+  selectLoadingGetSlots,
+  getSlots,
+  createSlot,
+  createBlock,
+  editBlock,
+} from '../../store/slots/slotsSlice';
 
 import { Modal } from '../common/Modal/Modal';
 import { SlotCreateForm } from './components/SlotCreateForm/SlotCreateForm';
@@ -14,6 +21,7 @@ import { Button } from '../common/Button/Button';
 import { SlotList } from './components/SlotList/SlotList';
 
 import './Slots.scss';
+import { BLOCK_TYPES } from '../../constants/block-types';
 
 export function Slots() {
   const [isSlotCreateFormOpen, setIsSlotCreateFormOpen] = useState(false);
@@ -56,33 +64,36 @@ export function Slots() {
   };
 
   const onSubmitBlockCreateForm: SubmitHandler<any> = async (data) => {
-    const content = data.type
-      ? {
-          text: data.text,
-          subtext: data.subtext,
-        }
-      : {
-          url: data.url,
-          subtext: data.subtext,
-        };
-    const attributes = data.type
-      ? {
-          title: data.title,
-        }
-      : {
-          alt: data.alt,
-        };
+    const content =
+      data.type === BLOCK_TYPES.TEXT
+        ? {
+            text: data.text,
+            subtext: data.subtext,
+          }
+        : {
+            url: data.url,
+            subtext: data.subtext,
+          };
+    const attributes =
+      data.type === BLOCK_TYPES.TEXT
+        ? {
+            title: data.title,
+          }
+        : {
+            alt: data.alt,
+          };
 
-    const styles = data.type
-      ? {
-          fontWeight: data.fontWeight,
-          fontSize: data.fontSize,
-          color: data.color,
-        }
-      : {
-          width: data.width,
-          height: data.height,
-        };
+    const styles =
+      data.type === BLOCK_TYPES.TEXT
+        ? {
+            fontWeight: data.fontWeight,
+            fontSize: data.fontSize,
+            color: data.color,
+          }
+        : {
+            width: data.width,
+            height: data.height,
+          };
     await dispatch(
       createBlock({
         projectId: +projectId!,
@@ -99,33 +110,38 @@ export function Slots() {
   };
 
   const onSubmitBlockEditForm: SubmitHandler<any> = async (data) => {
-    const content = data.type
-      ? {
-          text: data.text,
-          subtext: data.subtext,
-        }
-      : {
-          url: data.url,
-          subtext: data.subtext,
-        };
-    const attributes = data.type
-      ? {
-          title: data.title,
-        }
-      : {
-          alt: data.alt,
-        };
+    const content =
+      data.type === BLOCK_TYPES.TEXT
+        ? {
+            text: data.text,
+            subtext: data.subtext,
+          }
+        : {
+            url: data.url,
+            subtext: data.subtext,
+          };
 
-    const styles = data.type
-      ? {
-          fontWeight: data.fontWeight,
-          fontSize: data.fontSize,
-          color: data.color,
-        }
-      : {
-          width: data.width,
-          height: data.height,
-        };
+    const attributes =
+      data.type === BLOCK_TYPES.TEXT
+        ? {
+            title: data.title,
+          }
+        : {
+            alt: data.alt,
+          };
+
+    const styles =
+      data.type === BLOCK_TYPES.TEXT
+        ? {
+            fontWeight: data.fontWeight,
+            fontSize: data.fontSize,
+            color: data.color,
+          }
+        : {
+            width: data.width,
+            height: data.height,
+          };
+
     await dispatch(
       editBlock({
         projectId: +projectId!,
@@ -160,7 +176,12 @@ export function Slots() {
         </Modal>
       )}
       <div className="page">
-        <SlotList loadingGetSlots={loadingGetSlots} slots={slots} openBlockCreateForm={openBlockCreateForm} openBlockEditForm={openBlockEditForm} />
+        <SlotList
+          loadingGetSlots={loadingGetSlots}
+          slots={slots}
+          openBlockCreateForm={openBlockCreateForm}
+          openBlockEditForm={openBlockEditForm}
+        />
         <div className="createSlot">
           <Button label="Create Slot" onClick={() => setIsSlotCreateFormOpen(true)} />
         </div>

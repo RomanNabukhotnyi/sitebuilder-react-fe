@@ -67,6 +67,7 @@ export function BlockCreateForm({ onSubmit, slotId }: IProps) {
   const imageFields: Record<string, Field> = {
     url: {
       placeholder: 'Url',
+      required: true,
     },
     subtext: {
       placeholder: 'Subtext',
@@ -91,7 +92,15 @@ export function BlockCreateForm({ onSubmit, slotId }: IProps) {
       onSubmit={selectedType === BLOCK_TYPES.TEXT ? textForm.handleSubmit(onSubmit) : imageForm.handleSubmit(onSubmit)}
     >
       <h4>Create block</h4>
-      <Select selected={selectedType} setSelected={setSelectedType} className="select" options={options} />
+      <Select
+        selected={selectedType}
+        setSelected={(value) => {
+          setSelectedType(value);
+          selectedType === BLOCK_TYPES.TEXT ? textForm.reset() : imageForm.reset();
+        }}
+        className="select"
+        options={options}
+      />
       {selectedType === BLOCK_TYPES.TEXT && (
         <div>
           <FieldList fields={textFields} errors={textForm.formState.errors} register={textForm.register} />
