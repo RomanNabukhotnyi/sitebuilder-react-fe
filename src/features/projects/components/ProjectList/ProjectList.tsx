@@ -47,6 +47,16 @@ export function ProjectList({
     setIsOpenMenu(true);
   };
 
+  console.log(new Array(3).map((v, index) => {
+    return (
+      <div
+        key={index}
+        className="project-placeholder placeholder-animate"
+        style={{ animationDelay: `1.${index}s` }}
+      />
+    );
+  }))
+
   const projectList = projects.map((project) => {
     return (
       <div key={project.id} className="project">
@@ -91,12 +101,15 @@ export function ProjectList({
       )}
       {loadingGetProjects && (
         <div className="projectsContainer">
-          {/* <div
-        v-for="item in 3"
-        :key="item"
-        class="project-placeholder placeholder-animate"
-        :style="{ animationDelay: `1.${item}s` }"
-      /> */}
+          {new Array(3).fill(null).map((v, index) => {
+            return (
+              <div
+                key={index}
+                className="project-placeholder placeholder-animate"
+                style={{ animationDelay: `1.${index}s` }}
+              />
+            );
+          })}
         </div>
       )}
     </div>

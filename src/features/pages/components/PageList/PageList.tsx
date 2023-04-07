@@ -63,12 +63,15 @@ export function PageList({ pages, loadingGetPages, openEditForm }: IProps) {
       )}
       {loadingGetPages && (
         <div className="pagesContainer">
-          {/* <div
-        v-for="item in 3"
-        :key="item"
-        className="page-placeholder placeholder-animate"
-        :style="{ animationDelay: `1.${item}s` }"
-      /> */}
+          {new Array(3).fill(null).map((v, index) => {
+            return (
+              <div
+                key={index}
+                className="page-placeholder placeholder-animate"
+                style={{ animationDelay: `1.${index}s` }}
+              />
+            );
+          })}
         </div>
       )}
     </div>

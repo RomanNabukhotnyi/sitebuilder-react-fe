@@ -42,12 +42,15 @@ export function SlotList({ slots, loadingGetSlots, openBlockCreateForm, openBloc
       {!loadingGetSlots && !!slots.length && <TransitionList className="slots">{slotList}</TransitionList>}
       {loadingGetSlots && (
         <div>
-          {/* <div
-        v-for="item in 3"
-        :key="item"
-        className="slot-placeholder placeholder-animate"
-        :style="{ animationDelay: `1.${item}s` }"
-      /> */}
+          {new Array(3).fill(null).map((v, index) => {
+            return (
+              <div
+                key={index}
+                className="slot-placeholder placeholder-animate"
+                style={{ animationDelay: `1.${index}s` }}
+              />
+            );
+          })}
         </div>
       )}
     </div>
