@@ -1,5 +1,6 @@
 import { BlockList } from '../BlockList/BlockList';
 import { SlotMenu } from '../SlotMenu/SlotMenu';
+import { TransitionList } from '../../../common/TransitionList/TransitionList';
 
 import { PreparedSlot } from '../../../../types/slots/PreparedSlot';
 
@@ -38,13 +39,7 @@ export function SlotList({ slots, loadingGetSlots, openBlockCreateForm, openBloc
 
   return (
     <div className="u-slot-list">
-      {!loadingGetSlots && !!slots.length && (
-        <div className="slots">
-          {/* <CTransitionList> */}
-          {slotList}
-          {/* </CTransitionList> */}
-        </div>
-      )}
+      {!loadingGetSlots && !!slots.length && <TransitionList className="slots">{slotList}</TransitionList>}
       {loadingGetSlots && (
         <div>
           {/* <div

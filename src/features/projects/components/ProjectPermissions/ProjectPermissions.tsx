@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Button } from '../../../common/Button/Button';
 import { FieldList } from '../../../common/FieldList/FieldList';
 import { Select } from '../../../common/Select/Select';
+import { TransitionList } from '../../../common/TransitionList/TransitionList';
 
 import { useAppSelector, useAppDispatch } from '../../../../app/hooks';
 
@@ -86,11 +87,7 @@ export function ProjectPermissions({ projectId }: IProps) {
   return (
     <div className="u-project-user-permissions">
       <h4>Permissions</h4>
-      <div className="permissions">
-        {/* <CTransitionList> */}
-        {permissionList}
-        {/* </CTransitionList> */}
-      </div>
+      <TransitionList className="permissions">{permissionList}</TransitionList>
       <form v-if="isOwner" className="form" onSubmit={handleSubmit(onSubmit)}>
         <FieldList fields={fields} register={register} errors={errors} />
         <Select

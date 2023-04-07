@@ -1,4 +1,5 @@
 import { BlockMenu } from '../BlockMenu/BlockMenu';
+import { TransitionList } from '../../../common/TransitionList/TransitionList';
 
 import { ApiBlock } from '../../../../types/blocks/ApiBlock';
 import { ImageStyles } from '../../../../types/blocks/ImageStyles';
@@ -41,16 +42,17 @@ export function BlockList({ slotId, blocks, openBlockEditForm }: IProps) {
             {(block.content as TextContent).text}
           </div>
         )}
-        <BlockMenu slotId={slotId} blockIndex={index} blockId={block.id} blocks={blocks} openBlockEditForm={openBlockEditForm} className="block-list__menu" />
+        <BlockMenu
+          slotId={slotId}
+          blockIndex={index}
+          blockId={block.id}
+          blocks={blocks}
+          openBlockEditForm={openBlockEditForm}
+          className="block-list__menu"
+        />
       </div>
     );
   });
 
-  return (
-    <div className="u-block-list">
-      {/* <CTransitionList> */}
-      {blockList}
-      {/* </CTransitionList> */}
-    </div>
-  );
+  return <TransitionList className="u-block-list">{blockList}</TransitionList>;
 }

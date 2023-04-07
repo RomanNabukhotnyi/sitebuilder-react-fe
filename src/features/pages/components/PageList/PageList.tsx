@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '../../../common/Button/Button';
+import { TransitionList } from '../../../common/TransitionList/TransitionList';
 
 import { useAppDispatch } from '../../../../app/hooks';
 
@@ -44,11 +45,7 @@ export function PageList({ pages, loadingGetPages, openEditForm }: IProps) {
             <p>{page.name}</p>
           </div>
           <div className="actions">
-            <Button
-              label="Edit"
-              className="button__edit"
-              onClick={()=>openEditForm(page.id)}
-            />
+            <Button label="Edit" className="button__edit" onClick={() => openEditForm(page.id)} />
             <Button label="Delete" className="button__delete" onClick={() => handleDeletePage(page.id)} />
           </div>
         </div>
@@ -58,22 +55,7 @@ export function PageList({ pages, loadingGetPages, openEditForm }: IProps) {
 
   return (
     <div className="u-page-list">
-      {!loadingGetPages && !!pages.length && (
-        <div className="pagesContainer">
-          {/* <Draggable
-        v-model="draggablePages"
-        tag="transition-group"
-        group="pages"
-        animation="200"
-        ghost-class="ghost"
-        :component-data="{
-          name: 'pageList',
-        }"
-      > */}
-          {pageList}
-          {/* </Draggable> */}
-        </div>
-      )}
+      {!loadingGetPages && !!pages.length && <TransitionList className="pagesContainer">{pageList}</TransitionList>}
       {!loadingGetPages && pages.length === 0 && (
         <div className="noPages">
           <h3>No pages</h3>

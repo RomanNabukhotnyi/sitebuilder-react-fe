@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { deleteProject } from '../../../../store/projects/projectsSlice';
 import { useAppDispatch } from '../../../../app/hooks';
 import { ProjectMenu } from '../ProjectMenu/ProjectMenu';
+import { TransitionList } from '../../../common/TransitionList/TransitionList';
 
 import { ApiProject } from '../../../../types/projects/ApiProject';
 
@@ -53,18 +54,10 @@ export function ProjectList({
           <ProjectMenu
             v-if="project.id === menuProjectId"
             setIsOpenMenu={setIsOpenMenu}
-            // openPermissions: () => void;
-            // openApiKey: () => void;
             setIsApiKeyOpen={setIsApiKeyOpen}
             openEditForm={openEditForm}
             setIsPermissionsOpen={setIsPermissionsOpen}
             deleteProject={handleDeleteProject}
-            // :user="user"
-            // :project="project"
-            // @show-permissions="showPermissions(project)"
-            // @show-api-key="showApiKey(project)"
-            // @edit="showEditDialog(project)"
-            // @delete="deleteProject(project.id)"
           />
         )}
         <div className="projectHover" onClick={() => openProject(project.id)} />
@@ -89,11 +82,7 @@ export function ProjectList({
   return (
     <div className="u-project-list">
       {!loadingGetProjects && !!projects.length && (
-        <div className="projectsContainer">
-          {/* <CTransitionList> */}
-          {projectList}
-          {/* </CTransitionList> */}
-        </div>
+        <TransitionList className="projectsContainer">{projectList}</TransitionList>
       )}
       {!loadingGetProjects && projects.length === 0 && (
         <div className="noProjects">
