@@ -1,4 +1,5 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
+import { CSSTransition } from 'react-transition-group';
 
 import './Modal.scss';
 
@@ -11,14 +12,26 @@ interface IProps {
 export function Modal({ className, children, setIsOpen }: IProps) {
   return (
     <div className={`c-modal ${className}`}>
-      {/* <Transition name="fade"> */}
-      <div className="modal-overlay" onClick={() => setIsOpen(false)} />
-      {/* </Transition>
-        <Transition name="pop"> */}
-      <div className="modal">
-        {children}
-      </div>
-      {/* </Transition> */}
+      <CSSTransition
+        in={true}
+        classNames="fade"
+        appear
+        addEndListener={(node, done) => {
+          node.addEventListener('transitionend', done, false);
+        }}
+      >
+        <div className="modal-overlay" onClick={() => setIsOpen(false)} />
+      </CSSTransition>
+      <CSSTransition
+        in={true}
+        classNames="pop"
+        appear
+        addEndListener={(node, done) => {
+          node.addEventListener('transitionend', done, false);
+        }}
+      >
+        <div className="modal">{children}</div>
+      </CSSTransition>
     </div>
   );
 }
